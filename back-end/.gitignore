@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.db
+.env
+assign_matchday.py
+test_connection.py
