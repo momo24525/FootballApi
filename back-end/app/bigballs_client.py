@@ -3,7 +3,7 @@ from typing import Any
 import httpx
 from fastapi import HTTPException
 
-from .app.config import Settings
+from app.config import Settings
 
 
 class BigBallsAPIError(Exception):

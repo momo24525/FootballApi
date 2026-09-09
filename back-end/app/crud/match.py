@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy import or_, and_
 from app.models.match import Match
 from app.models.team import Team
 from app.schemas.match import MatchCreate
@@ -53,3 +53,25 @@ def get_matches(
         )
 
     return query.offset(skip).limit(limit).all()
+
+        
+def get_head_to_head(
+    db: Session, team1_name: str, team2_name: str, year: int | None = None
+) -> list[Match]:
+    query = db.query(Match).filter(
+        or_(
+            and_(
+                Match.home_team.has(Team.name.ilike(team1_name)),
+                Match.away_team.has(Team.name.ilike(team2_name)),
+            ),
+            and_(
+                Match.home_team.has(Team.name.ilike(team2_name)),
+                Match.away_team.has(Team.name.ilike(team1_name)),
+            ),
+        )
+    )
+
+    if year:
+        query = query.filter(Match.season.has(year=year))
+
+    return query.order_by(Match.match_date.desc()).all()

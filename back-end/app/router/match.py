@@ -33,6 +33,30 @@ def list_matches(
         for m in matches
     ]
     
+@router.get("/headtohead", response_model=list[schemas.MatchOut])
+def list_h2h(
+    team1: str, 
+    team2: str,
+    year: int | None = None,
+    db: Session = Depends(get_db),
+):
+    matches = crud.get_head_to_head(
+        db, team1_name=team1, team2_name=team2, year=year
+    )
+    return [
+        schemas.MatchOut(
+            id=m.id,  #type:ignore
+            matchday=m.matchday,#type:ignore
+            match_date=m.match_date,#type:ignore
+            home_goals=m.home_goals,#type:ignore
+            away_goals=m.away_goals,#type:ignore
+            home_team=m.home_team.name,
+            away_team=m.away_team.name,
+            season=m.season.year,
+        )
+        for m in matches
+    ]
+    
 @router.post("/", response_model=schemas.MatchOut)
 def create_match(match_in: schemas.MatchCreate, db: Session = Depends(get_db)):
     existing = crud.get_match_by_teams_and_matchday(

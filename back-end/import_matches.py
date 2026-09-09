@@ -2,7 +2,7 @@ import asyncio
 from datetime import date, timedelta
 
 from app.config import settings
-from bigballs_client import BigBallsClient
+from app.bigballs_client import BigBallsClient
 from app.db import SessionLocal
 from app.crud.team import get_or_create_team
 from app.crud.season import get_or_create_season
@@ -10,9 +10,9 @@ from app.crud.match import get_match_by_teams_and_matchday, create_match
 from app.schemas.match import MatchCreate
 
 
-SEASON_YEAR = 2021
-SEASON_START = date(2021, 8, 21)   # adatta alle date reali della stagione
-SEASON_END = date(2022, 5, 22)
+SEASON_YEAR = 2026
+SEASON_START = date(2026, 8, 20)   # adatta alle date reali della stagione
+SEASON_END = date(2026, 9, 8)
 
 
 def map_api_match_to_create(data: dict, season_id: int, db) -> MatchCreate | None:
