@@ -1,0 +1,125 @@
+.navbar {
+    width: 100%;
+    background-color: #225696;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-inner {
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand links toggle";
+    align-items: center;
+    padding: 14px 0;
+    min-height: 80px;
+}
+
+.navbar-brand {
+    display: flex;
+    font-family: fantasy;
+    align-items: center;
+    gap: 10px;
+    color: yellow;
+    -webkit-text-stroke: 1px black;
+    font-size: 26px;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.2px;
+    grid-area: brand;
+    justify-self: start;
+}
+
+.navbar-brand-mark {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    grid-area: links;
+    justify-self: end;
+}
+
+.navbar-links a {
+    color: #f6f6ea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 4px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar-links a:hover {
+    color: yellow;
+    border-bottom-color: yellow;
+}
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    grid-area: toggle;
+    justify-self: end;
+}
+
+.navbar-toggle span {
+    width: 22px;
+    height: 2px;
+    background-color: #f6f6ea;
+    border-radius: 2px;
+}
+
+/* Responsive: menu a tendina sotto una certa larghezza */
+@media (max-width: 700px) {
+    .navbar-inner {
+        width: 92%;
+    }
+
+    .navbar-toggle {
+        display: flex;
+    }
+
+    .navbar-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        background-color: #225696;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease;
+    }
+
+    .navbar-links-open {
+        max-height: 300px;
+    }
+
+    .navbar-links li {
+        width: 100%;
+    }
+
+    .navbar-links a {
+        display: block;
+        width: 100%;
+        padding: 12px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .navbar {
+        position: relative;
+    }
+}

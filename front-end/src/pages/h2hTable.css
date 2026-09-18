@@ -1,5 +1,3 @@
-
-
 .container {
     width: 100%;
     min-height: 100vh;
@@ -7,24 +5,22 @@
     padding: 30px;
 }
 
-
-.forms {
+.formss {
     background-color: #225696;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
-    gap: 59px;
+    align-items: center;
+    gap: 12px;
     padding: 16px 20px;
     border-radius: 10px;
     margin: 0 auto 20px;
     width: 80%;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    border: 1px solid;
 }
 
 
-.forms select,
-.forms input {
+.formss select,
+.formss input {
     background-color: #f6f6ea;
     color: black;
     border: 1px solid #444;
@@ -37,36 +33,35 @@
 }
 
 /* Giallo su hover, e resta giallo anche quando la select è aperta (focus) */
-.forms select:hover,
-.forms select:focus,
-.forms input:hover,
-.forms input:focus {
+.formss select:hover,
+.formss select:focus,
+.formss input:hover,
+.formss input:focus {
     border-color: #666;
     background-color: yellow;
 }
 
 /* Le opzioni nel menu restano bianche, indipendentemente dallo stato del campo */
-.forms select option {
+.formss select option {
     background-color: white;
     color: black;
 }
 
 
 
-.forms button {
+.formss button {
     background-color: #f6f6ea;
     color: black;
     border: none;
     border-radius: 6px;
     padding: 8px 20px;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    min-height: 39px;
 }
 
-.forms button:hover {
+.formss button:hover {
     background-color: yellow;
 }
 
@@ -125,28 +120,85 @@
     font-size: 16px;
 }
 
-
-
-.filter {
+.error-message {
+    width: 40%;
+    margin: 0 auto 5px;
+    background-color: #fdecea;
+    color: #b3261e;
+    border: 1px solid #f5c2c0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
     display: flex;
-    flex-direction: column;
-    min-width: 150px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: fadeIn 0.55s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notfound-message {
+    width: 40%;
+    margin: 0 auto 5px;
+    background-color: #fdecea;
+    color: #3e4135;
+    border: 1px solid #7c7c7c;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: fadeIn 0.55s ease;
 }
 
 
-.filter p {
-    margin: 0 0 5px 0;
+.error-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
     height: 20px;
-    color: yellow;
-    font-family: sans-serif;
-    font-weight: bold;
-    -webkit-text-stroke: 0.6px black;
-    font-size: 23px;
+    min-width: 20px;
+    border-radius: 50%;
+    background-color: #b3261e;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
 }
 
-.filter select,
-.filter input {
-    height: 40px;
-    box-sizing: border-box;
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
 }
 
+.dot-win {
+    background-color: #1e7e34;
+}
+
+.dot-lose {
+    background-color: #b3261e;
+}
+
+.dot-draw {
+    background-color: #d4a017;
+}

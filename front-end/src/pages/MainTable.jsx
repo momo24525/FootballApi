@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./MainTable.css";
+import Chatbot from "../components/Chatbot";
 
 
 function App() {
@@ -7,11 +8,13 @@ function App() {
 
   const [teams, setTeams] = useState([]);
   const [seasons, setSeasons] = useState([]);
+  const [notFound, setNotFound] = useState("");
 
   const [team, setTeam] = useState("");
   const [limit, setLimit] = useState("");
   const [season, setSeason] = useState("");
   const [matchday, setMatchday] = useState("")
+  
 
 
 
@@ -57,75 +60,116 @@ function App() {
     const params = new URLSearchParams(
       Object.entries(filters).filter(([, value]) => value !== "")
     );
+    
+    setNotFound("");
 
     fetch(`http://127.0.0.1:8000/matches/?${params}`)
-      .then((res) => res.json())
-      .then((data) => setMatches(data));
+      .then(async(res) => {
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => null);
+          throw new Error(errBody?.detail || "Errore durante la ricerca");
+        }
+        return res.json();
+      })
+      .then((data) => setMatches(data))
+      .catch((err) => {
+        setMatches([]);
+        setNotFound(err.message);
+      });
 
   };
+
+
+
 
   return (
     <div className="container">
 
-      <h1>Partite</h1>
+      { /* <h1 className="title">Partite</h1>  */}
+
+      {notFound && (
+        <p className="notfound-message">
+          <span className="error-icon">!</span>
+          {notFound}
+        </p>
+      )}
 
       <div className="forms">
 
-        <select
-          value={team}
-          onChange={(e) => setTeam(e.target.value)}
-        >
-          <option value="">Tutte le squadre</option>
+    { /*   <div className="filter"> */}
+          <div>
+     {  /*   <p>Team</p> */ }
+          <select
+            value={team}
+            onChange={(e) => setTeam(e.target.value)}
+          >
+            <option value="">Tutte le squadre</option>
 
-          {teams.map((team) => (
-            <option key={team.id} value={team.name}>
-              {team.name}
-            </option>
-          ))}
-        </select>
+            {[...teams]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((team) => (
+                <option key={team.id} value={team.name}>
+                  {team.name}
+                </option>
+              ))}
+          </select>
+        </div>
 
+        { /*   <div className="filter"> */}
+        <div>
+          {/* <p>Season</p> */}
+          <select
+            value={season}
+            onChange={(e) => setSeason(e.target.value)}
+          >
+            <option value="">Tutte le stagioni</option>
 
-        <select
-          value={season}
-          onChange={(e) => setSeason(e.target.value)}
-        >
-          <option value="">Tutte le stagioni</option>
+            {[...seasons]
+              .sort((a, b) => b.year - a.year)
+              .map((seasonValue) => (
+                <option key={seasonValue.id} value={seasonValue.year}>
+                  {seasonValue.year}-{seasonValue.year + 1}
+                </option>
+              ))}
+          </select>
+        </div>
 
-          {seasons.map((seasonValue) => (
-            <option key={seasonValue.id} value={seasonValue.year}>
-              {seasonValue.year}-{seasonValue.year + 1}
-            </option>
-          ))}
-        </select>
+        { /*   <div className="filter"> */}
+        <div>
+          {/* <p>Matchday</p> */}
+          <select
+            value={matchday}
+            onChange={(e) => setMatchday(e.target.value)}
+          >
+            <option value="">Tutti i turni</option>
 
+            {Array.from({ length: 38 }, (_, i) => i + 1).map((number) => (
+              <option key={number} value={number}>
+                {number}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <select
-          value={matchday}
-          onChange={(e) => setMatchday(e.target.value)}
-        >
-          <option value="">Tutti i turni</option>
+        { /*   <div className="filter"> */}
+        <div>
+          {/* <p>Limit</p> */}
+          <input
+            type="number"
+            value={limit}
+            onChange={(e) => setLimit(e.target.value)}
+            placeholder="Limite risultati"
+          />
+        </div>
 
-          {Array.from({ length: 38 }, (_, i) => i + 1).map((number) => (
-            <option key={number} value={number}>
-              {number}
-            </option>
-          ))}
-        </select>
-
-
-        <input
-          type="number"
-          value={limit}
-          onChange={(e) => setLimit(e.target.value)}
-          placeholder="Limite risultati"
-        />
-
-
+           
         <button onClick={searchMatches}>
           Cerca
         </button>
 
       </div>
+
+      {matches.length > 0 && <Chatbot matches={matches} />}
 
 
       <div className="table">
@@ -157,6 +201,7 @@ function App() {
           </tbody>
         </table>
       </div>
+      
 
     </div>
   );
