@@ -4,3 +4,6 @@ __pycache__/
 .env
 assign_matchday.py
 test_connection.py
+correggi.py
+validate.py
+test_ai.py

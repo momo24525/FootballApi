@@ -13,7 +13,7 @@ def list_matches(
     year: int | None = None,
     matchday: int | None = None,
     skip: int = 0,
-    limit: int = 100,
+    limit: int = 380,
     db: Session = Depends(get_db),
 ):
     matches = crud.get_matches(
@@ -38,10 +38,11 @@ def list_h2h(
     team1: str, 
     team2: str,
     year: int | None = None,
+    matchday: int | None = None,
     db: Session = Depends(get_db),
 ):
     matches = crud.get_head_to_head(
-        db, team1_name=team1, team2_name=team2, year=year
+        db, team1_name=team1, team2_name=team2, year=year, matchday=matchday
     )
     return [
         schemas.MatchOut(

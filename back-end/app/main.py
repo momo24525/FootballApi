@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.router import team, match, season
+from app.router import team, match, season, chat
 
 app = FastAPI(title="Calcio DB API")
 
 app.include_router(team.router)
 app.include_router(match.router)
 app.include_router(season.router)
+app.include_router(chat.router)
 
 
 @app.get("/")

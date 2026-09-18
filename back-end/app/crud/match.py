@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, asc, desc
 from app.models.match import Match
 from app.models.team import Team
+from app.models.season import Season
 from app.schemas.match import MatchCreate
+from fastapi import HTTPException
 
 def get_match_by_teams_and_matchday(
     db: Session,
@@ -35,7 +37,7 @@ def get_matches(
     year: int | None = None,
     matchday: int | None = None,
     skip: int = 0,
-    limit: int = 100,
+    limit: int = 380,
 ) -> list[Match]:
     query = db.query(Match).join(Match.season)
 
@@ -52,11 +54,20 @@ def get_matches(
             (Match.away_team.has(Team.name.ilike(team_name)))
         )
 
-    return query.offset(skip).limit(limit).all()
+    results = query.order_by(desc(Season.year), desc(Match.matchday)).offset(skip).limit(limit).all()
+    
+    if not results:
+        detail = f"Nessun incontro trovato per {team_name}"
+        if year:
+            detail += f" nella stagione {year} - {year + 1}"
+
+        raise HTTPException(status_code=404, detail=detail)
+
+    return results
 
         
 def get_head_to_head(
-    db: Session, team1_name: str, team2_name: str, year: int | None = None
+    db: Session, team1_name: str, team2_name: str, year: int | None = None, matchday: int | None = None
 ) -> list[Match]:
     query = db.query(Match).filter(
         or_(
@@ -73,5 +84,17 @@ def get_head_to_head(
 
     if year:
         query = query.filter(Match.season.has(year=year))
+        
+    if matchday:
+        query = query.filter(Match.matchday == matchday)
+        
+    results = query.order_by(Match.match_date.desc()).all()
+    
+    if not results:
+        detail = f"Nessun incontro trovato tra '{team1_name}' e '{team2_name}'"
+        if year:
+            detail += f" nella stagione {year} - {year + 1}"
 
-    return query.order_by(Match.match_date.desc()).all()
+        raise HTTPException(status_code=404, detail=detail)
+
+    return results
