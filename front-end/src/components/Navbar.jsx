@@ -5,7 +5,7 @@ import "./Navbar.css";
 const LINKS = [
     { label: "Partite", to: "/matches" },
     { label: "Head to head", to: "/h2h" },
-    { label: "Stagioni", to: "/seasons" },
+    { label: "Calendario", to: "/fixtures" },
     { label: "Classifica", to: "/standings" },
 ];
 

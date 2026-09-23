@@ -8,67 +8,7 @@
 }
 
 
-.forms {
-    background-color: #225696;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 59px;
-    padding: 16px 20px;
-    border-radius: 10px;
-    margin: 0 auto 20px;
-    width: 80%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    border: 1px solid;
-}
 
-
-.forms select,
-.forms input {
-    background-color: #f6f6ea;
-    color: black;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-
-/* Giallo su hover, e resta giallo anche quando la select è aperta (focus) */
-.forms select:hover,
-.forms select:focus,
-.forms input:hover,
-.forms input:focus {
-    border-color: #666;
-    background-color: yellow;
-}
-
-/* Le opzioni nel menu restano bianche, indipendentemente dallo stato del campo */
-.forms select option {
-    background-color: white;
-    color: black;
-}
-
-
-
-.forms button {
-    background-color: #f6f6ea;
-    color: black;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    min-height: 39px;
-}
-
-.forms button:hover {
-    background-color: yellow;
-}
 
 .table {
     width: 80%;

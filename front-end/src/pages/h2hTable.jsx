@@ -63,10 +63,18 @@ function App() {
 
   };
 
-    const getDotClass = (isWinner, isDraw) => {
-        if (isDraw) return "dot-draw";
-        return isWinner ? "dot-win" : "dot-lose";
+  const getRowDotClasses = (m) => {
+    const hasScore = m.home_goals != null && m.away_goals != null;
+    if (!hasScore) return { home: null, away: null };
+
+    const isDraw = m.home_goals === m.away_goals;
+    const homeWins = m.home_goals > m.away_goals;
+
+    return {
+      home: isDraw ? "dot-draw" : homeWins ? "dot-win" : "dot-lose",
+      away: isDraw ? "dot-draw" : homeWins ? "dot-lose" : "dot-win",
     };
+  };
 
   return (
     <div className="container">
@@ -171,28 +179,27 @@ function App() {
 
           <tbody>
             {matches.map((m) => {
-                const isDraw = m.home_goals === m.away_goals;
-                const homeWins = m.home_goals > m.away_goals;
+              const { home, away } = getRowDotClasses(m);
 
-                return (
-                    <tr key={m.id}>
-                        <td>
-                            <span className={`status-dot ${getDotClass(homeWins, isDraw)}`}></span>
-                            {m.home_team}
-                        </td>
-                        <td className="score">
-                            {m.home_goals} - {m.away_goals}
-                        </td>
-                        <td>
-                            <span className={`status-dot ${getDotClass(!homeWins, isDraw)}`}></span>
-                            {m.away_team}
-                        </td>
-                        <td className="mdse">{m.matchday}</td>
-                        <td className="mdse">
-                            {m.season} - {m.season + 1}
-                        </td>
-                    </tr>
-                );
+              return (
+                <tr key={m.id}>
+                  <td>
+                    <span className={`status-dot ${home ?? ""}`}></span>
+                    {m.home_team}
+                  </td>
+                  <td className="score">
+                    {m.home_goals} - {m.away_goals}
+                  </td>
+                  <td>
+                    <span className={`status-dot ${away ?? ""}`}></span>
+                    {m.away_team}
+                  </td>
+                  <td className="mdse">{m.matchday}</td>
+                  <td className="mdse">
+                    {m.season} - {m.season + 1}
+                  </td>
+                </tr>
+              );
             })}
           </tbody>
         </table>

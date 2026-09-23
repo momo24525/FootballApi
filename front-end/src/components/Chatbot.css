@@ -53,7 +53,8 @@
 
 .chat-bubble.user {
     align-self: flex-end;
-    background-color: #e6eefb;
+    background-color: yellow;
+    border: 1px solid;
     color: #1a1a1a;
     border-bottom-right-radius: 2px;
 }

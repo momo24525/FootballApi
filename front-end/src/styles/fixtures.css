@@ -1,0 +1,67 @@
+.fixtures-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.matchday-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.matchday-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #333;
+}
+
+.fixture-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    margin: 0;
+    border-radius: 6px;
+    background-color: #f6f6ea;
+    border: 1px solid black;
+    transition: background-color 0.15s ease;
+}
+
+.fixture-row:hover {
+    background-color: yellow;
+}
+
+.fixture-team {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.fixture-team:first-child {
+    text-align: right;
+}
+
+.fixture-team:last-child {
+    text-align: left;
+}
+
+.fixture-score {
+    flex: 0 0 auto;
+    min-width: 60px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0 16px;
+}
+
+.fixture-season {
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 16px;
+    min-width: 80px;
+    text-align: right;
+}
