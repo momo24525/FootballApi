@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Boolean, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.db import Base
@@ -16,6 +16,8 @@ class Match(Base):
 
     home_goals = Column(Integer, nullable=False)
     away_goals = Column(Integer, nullable=False)
+    
+    isplayed = Column(Boolean, nullable=True)
 
     # Relazioni verso Team: serve foreign_keys esplicito perché ci sono 2 FK verso la stessa tabella
     home_team = relationship(

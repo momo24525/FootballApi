@@ -16,8 +16,8 @@ class MatchOut(BaseModel):
     id: int
     matchday: int | None = None
     match_date: date | None = None
-    home_goals: int
-    away_goals: int
+    home_goals: int | None = None
+    away_goals: int  | None = None
     home_team: str    # nome squadra, non id
     away_team: str
     season: int        # anno, non id

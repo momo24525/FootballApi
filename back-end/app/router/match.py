@@ -33,6 +33,34 @@ def list_matches(
         for m in matches
     ]
     
+@router.get("/fixtures", response_model=list[schemas.MatchOut])
+def list_fixtures(
+    team: str | None = None,
+    year: int | None = None,
+    matchday: int | None = None,
+    skip: int = 0,
+    limit: int = 380,
+    db: Session = Depends(get_db),
+):
+    matches = crud.get_fixtures(
+    db, team_name=team, matchday=matchday,year=year, skip=skip, limit=limit
+)
+    return [
+        schemas.MatchOut(
+            id=m.id,  #type:ignore
+            matchday=m.matchday,#type:ignore
+            match_date=m.match_date,#type:ignore
+            home_goals= None,#type:ignore
+            away_goals= None,#type:ignore
+            home_team=m.home_team.name,
+            away_team=m.away_team.name,
+            season=m.season.year,
+        )
+        for m in matches
+    ]
+    
+
+    
 @router.get("/headtohead", response_model=list[schemas.MatchOut])
 def list_h2h(
     team1: str, 
@@ -49,8 +77,8 @@ def list_h2h(
             id=m.id,  #type:ignore
             matchday=m.matchday,#type:ignore
             match_date=m.match_date,#type:ignore
-            home_goals=m.home_goals,#type:ignore
-            away_goals=m.away_goals,#type:ignore
+            home_goals=m.home_goals if m.isplayed else None,  # type: ignore
+            away_goals=m.away_goals if m.isplayed else None,  # type: ignore
             home_team=m.home_team.name,
             away_team=m.away_team.name,
             season=m.season.year,

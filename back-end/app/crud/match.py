@@ -36,34 +36,32 @@ def get_matches(
     team_name: str | None = None,
     year: int | None = None,
     matchday: int | None = None,
+    played: bool | None = True,
     skip: int = 0,
     limit: int = 380,
 ) -> list[Match]:
     query = db.query(Match).join(Match.season)
 
-    if year:
-        query = query.filter(Match.season.has(year=year))
-
-    if matchday:
+    if played is not None:
+        query = query.filter(Match.isplayed.is_(played))
+    if year is not None:
+        query = query.filter(Season.year == year)
+    if matchday is not None:
         query = query.filter(Match.matchday == matchday)
-
-        
     if team_name:
         query = query.filter(
-            (Match.home_team.has(Team.name.ilike(team_name))) |
-            (Match.away_team.has(Team.name.ilike(team_name)))
+            Match.home_team.has(Team.name.ilike(team_name))
+            | Match.away_team.has(Team.name.ilike(team_name))
         )
 
-    results = query.order_by(desc(Season.year), desc(Match.matchday)).offset(skip).limit(limit).all()
-    
-    if not results:
-        detail = f"Nessun incontro trovato per {team_name}"
-        if year:
-            detail += f" nella stagione {year} - {year + 1}"
+    if played is True:
+        query = query.filter(Match.isplayed.is_(True))
+        query = query.order_by(Match.match_date.desc())
+    elif played is False:
+        query = query.filter(or_(Match.isplayed.is_(False), Match.isplayed.is_(None)))
+        query = query.order_by(Match.match_date.asc())
 
-        raise HTTPException(status_code=404, detail=detail)
-
-    return results
+    return query.offset(skip).limit(limit).all()
 
         
 def get_head_to_head(
@@ -98,3 +96,8 @@ def get_head_to_head(
         raise HTTPException(status_code=404, detail=detail)
 
     return results
+
+def get_fixtures(db: Session, **kwargs) -> list[Match]:
+    return get_matches(db, played=False, **kwargs)
+
+
