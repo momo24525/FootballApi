@@ -8,8 +8,8 @@ router = APIRouter(prefix="/teams", tags=["teams"])
 
 
 @router.get("/", response_model=list[schemas.TeamOut])
-def list_teams(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_teams(db, skip=skip, limit=limit)
+def list_teams(year: int | None = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_teams(db, year=year, skip=skip, limit=limit)
 
 
 @router.post("/", response_model=schemas.TeamOut)

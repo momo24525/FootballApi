@@ -101,3 +101,19 @@ def get_fixtures(db: Session, **kwargs) -> list[Match]:
     return get_matches(db, played=False, **kwargs)
 
 
+def get_matchdays(
+    db: Session,
+    year: int | None = None,
+    played: bool | None = None,
+) -> list[int]:
+    query = db.query(Match.matchday).join(Match.season).filter(Match.matchday.isnot(None))
+
+    if year is not None:
+        query = query.filter(Season.year == year)
+
+    if played is True:
+        query = query.filter(Match.isplayed.is_(True))
+    elif played is False:
+        query = query.filter(or_(Match.isplayed.is_(False), Match.isplayed.is_(None)))
+
+    return [row[0] for row in query.distinct().order_by(Match.matchday).all()]

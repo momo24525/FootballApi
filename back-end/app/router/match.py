@@ -107,3 +107,12 @@ def create_match(match_in: schemas.MatchCreate, db: Session = Depends(get_db)):
         away_team=match.away_team.name,
         season=match.season.year,
     )
+    
+    
+@router.get("/matchdays", response_model=list[int])
+def list_matchdays(
+    year: int | None = None,
+    played: bool | None = None,
+    db: Session = Depends(get_db),
+):
+    return crud.get_matchdays(db, year=year, played=played)

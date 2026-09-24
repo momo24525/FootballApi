@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.models.team import Team
+from app.models.match import Match
+from app.models.season import Season
 from app.schemas.team import TeamCreate
 
 
@@ -70,5 +72,13 @@ def get_or_create_team(db: Session, name: str, city: str | None = None) -> Team:
     return team
 
 
-def get_teams(db: Session, skip: int = 0, limit: int = 100) -> list[Team]:
-    return db.query(Team).offset(skip).limit(limit).all()
+def get_teams(db: Session, skip: int = 0, limit: int = 100, year: int | None = None) -> list[Team]:
+    query = db.query(Team)
+
+    if year is not None:
+        query = query.filter(
+            Team.home_matches.any(Match.season.has(Season.year == year))
+            | Team.away_matches.any(Match.season.has(Season.year == year))
+        )
+
+    return query.offset(skip).limit(limit).all()
