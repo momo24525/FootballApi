@@ -13,21 +13,31 @@ function App() {
     const [team, setTeam] = useState("");
     const [limit, setLimit] = useState("");
     const [season, setSeason] = useState("");
-    const [matchday, setMatchday] = useState("")
+    const [matchday, setMatchday] = useState("");  
+    const [matchdays, setMatchdays] = useState([]);
 
 
 
 
     // Carica squadre e stagioni dal DB
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/teams/")
+        fetch("http://127.0.0.1:8000/teams/?year=2026")
             .then((res) => res.json())
             .then((data) => setTeams(data));
-
-        fetch("http://127.0.0.1:8000/seasons/")
-            .then((res) => res.json())
-            .then((data) => setSeasons(data));
     }, []);
+
+    // lista dei matchday
+    useEffect(() => {
+        const params = new URLSearchParams({ played: "false" });
+        if (season !== "") params.append("year", season);
+
+        fetch(`http://127.0.0.1:8000/matches/matchdays?${params}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setMatchdays(data);
+                setMatchday("");
+            });
+    }, [season]);
 
     /* const searchMatches = () => {
        const params = new URLSearchParams({
@@ -79,17 +89,22 @@ function App() {
 
     };
 
-    const groupByMatchday = (matches) => {
-        return matches.reduce((groups, m) => {
-            const day = m.matchday;
-            if (!groups[day]) {
-                groups[day] = [];
-            }
-            groups[day].push(m);
+
+    const groupBy = (items, key) =>
+        items.reduce((groups, item) => {
+            const value = item[key] ?? "Data da definire";
+            (groups[value] ??= []).push(item);
             return groups;
         }, {});
-    };
 
+    const formatDate = (iso) =>
+        iso === "Data da definire"
+            ? iso
+            : new Date(iso).toLocaleDateString("it-IT", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+            });
 
 
 
@@ -135,8 +150,7 @@ function App() {
                         onChange={(e) => setMatchday(e.target.value)}
                     >
                         <option value="">Tutti i turni</option>
-
-                        {Array.from({ length: 38 }, (_, i) => i + 1).map((number) => (
+                        {matchdays.map((number) => (
                             <option key={number} value={number}>
                                 {number}
                             </option>
@@ -155,21 +169,28 @@ function App() {
 
 
             <div className="fixtures-list">
-                {Object.entries(groupByMatchday(matches))
-                    .sort(([dayA], [dayB]) => Number(dayA) - Number(dayB))
+                {Object.entries(groupBy(matches, "matchday"))
+                    .sort(([a], [b]) => Number(a) - Number(b))
                     .map(([day, dayMatches]) => (
                         <div key={day} className="matchday-group">
                             <h3 className="matchday-title">Giornata {day}</h3>
 
-                            {dayMatches.map((m) => (
-                                <p key={m.id} className="fixture-row">
-                                    <span className="fixture-team">{m.home_team}</span>
-                                    <span className="fixture-score">
-                                        {m.home_goals} - {m.away_goals}
-                                    </span>
-                                    <span className="fixture-team">{m.away_team}</span>
-                                </p>
-                            ))}
+                            {Object.entries(groupBy(dayMatches, "match_date"))
+                                .sort(([a], [b]) => a.localeCompare(b))
+                                .map(([date, dateMatches]) => (
+                                    <div key={date}>
+                                        <h4 className="date-title">{formatDate(date)}</h4>
+                                        <div className="fixtures-grid">
+                                            {dateMatches.map((m) => (
+                                                <div key={m.id} className="fixture-card">
+                                                    <span className="fixture-team">{m.home_team}</span>
+                                                    <span className="fixture-score">vs</span>
+                                                    <span className="fixture-team">{m.away_team}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
                         </div>
                     ))}
             </div>

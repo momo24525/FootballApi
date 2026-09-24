@@ -1,67 +1,67 @@
-.fixtures-list {
+.fixtures-grid {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    margin-top: 24px;
+    gap: 10px;
 }
 
-.matchday-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.matchday-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #333;
-}
-
-.fixture-row {
-    display: flex;
+.fixture-card {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    margin: 0;
-    border-radius: 6px;
-    background-color: #f6f6ea;
+    padding: 0px 21px;
+    background-color: white;
     border: 1px solid black;
-    transition: background-color 0.15s ease;
+    height: 2.3rem;
 }
 
-.fixture-row:hover {
+.fixture-card:hover {
+    transform: translateY(-2px);
     background-color: yellow;
+    cursor: pointer;
 }
 
 .fixture-team {
-    flex: 1;
-    font-size: 0.95rem;
-}
-
-.fixture-team:first-child {
-    text-align: right;
+    font-weight: 600;
 }
 
 .fixture-team:last-child {
-    text-align: left;
+    text-align: right;
 }
 
 .fixture-score {
-    flex: 0 0 auto;
-    min-width: 60px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0 16px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 15px;
 }
 
-.fixture-season {
-    flex: 0 0 auto;
-    font-size: 0.8rem;
-    color: #888;
-    margin-left: 16px;
-    min-width: 80px;
-    text-align: right;
+
+.fixtures-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+    margin: 0px 6%;
+}
+
+.matchday-group {
+    width: 100%;
+    max-width: 450px;
+    justify-self: start;
+    padding: 15px;
+    background-color: #225696;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.matchday-title{
+    color: #f6f6ea;
+}
+
+.date-title {
+    color: #f6f6ea;
+    margin: 10px 0;
+    padding: 0 5px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
 }
